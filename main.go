@@ -22,7 +22,14 @@ func run(api *slack.Client) int {
 
 			case *slack.MessageEvent:
 				log.Printf("Message: %v\n", ev)
-				rtm.SendMessage(rtm.NewOutgoingMessage("Hello world", ev.Channel))
+				plg := NewPlugins(ev.Text, ev.Channel)
+				res := plg.Run()
+
+				for i := range res {
+					if res[i] != "" {
+						rtm.SendMessage(rtm.NewOutgoingMessage(res[i], ev.Channel))
+					}
+				}
 
 			case *slack.InvalidAuthEvent:
 				log.Print("Invalid credentials")
