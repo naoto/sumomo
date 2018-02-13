@@ -22,6 +22,7 @@ func (t Plugins) Run() []string {
 	var res []string
 	today := plugin.NewToday(p.Message, p.Channel)
 	res = append(res, today.SendMessage())
+	res = append(res, plugin.NewWeather(p.Message, p.Channel).SendMessage())
 
 	return res
 }
